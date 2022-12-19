@@ -53,6 +53,39 @@ describe UserRepository do
         end
     end
 
+    context "Given new user details" do
+        it " creates a user and stores it in the database" do
+            repo = UserRepository.new
+            user = User.new
+            
+            user.name = "hibaq"
+            user.username = "hibaq123"
+            user.email = "hibaq@email.com"
+            user.password = "password3"
+            repo.create(user)
+        end
+
+    end
+
+    context "Given user details that match database records" do
+       it "login success" do
+            repo = UserRepository.new
+            user = User.new
+            
+            user.name = "hibaq"
+            user.username = "hibaq123"
+            user.email = "hibaq@email.com"
+            user.password = "password3"
+            repo.create(user)
+            
+            account = repo.sign_in("hibaq@email.com", "password3")
+
+            expect(account["email"]).to eq(user.email)
+
+       end
+
+    end
+
 
 
 
