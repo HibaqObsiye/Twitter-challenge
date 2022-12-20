@@ -1,5 +1,5 @@
-require '../lib/tweet.rb'
-require'../lib/database_connection.rb'
+require'./lib/tweet.rb'
+require'./lib/database_connection.rb'
 
 class TweetRepository
 
@@ -19,7 +19,7 @@ class TweetRepository
 
             tweets << tweet
         end
-      
+      tweets
     end
 
     def find(id)

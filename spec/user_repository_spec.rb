@@ -1,7 +1,7 @@
-require '../lib/user.rb' 
-require '../lib/user_repository.rb'
-require '../spec/spec_helper.rb'
-require '../lib/database_connection.rb'
+require '../../chitter-challenge/lib/user.rb' 
+require '../../chitter-challenge/lib/user_repository.rb'
+require '../spec/spec_helper.rb' 
+# require '../lib/database_connection.rb'
 
 def reset_tweets_table
     seed_sql = File.read('../databases/tweets_seeds.sql')

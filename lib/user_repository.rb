@@ -1,5 +1,6 @@
-require '../lib/user.rb'
-require'../lib/database_connection.rb'
+require '../../chitter-challenge/lib/user.rb' 
+require'../../chitter-challenge/lib/database_connection.rb'  
+require 'bcrypt'
 
 class UserRepository
 
@@ -19,6 +20,7 @@ class UserRepository
 
            users << user
         end
+        users
     end
 
    def find(id)
@@ -38,19 +40,32 @@ class UserRepository
    end
 
    def create(user)
-    query = "INSERT users (id, name, username, email, password) VALUES ($1, $2, $3, $4, $5) "
-    params = [id, name, username, email, password]
+    encrypted_password = BCrypt::Password.create(user.password)
+    query = "INSERT into users (id, name, username, email, password) VALUES ($1, $2, $3, $4) "
+
+    params = [user.id, user.name, user.username, user.email, encrypted_password]
 
     result_set = DatabaseConnection.exec_params(query, params)
+
+    return ''
    end
 
-#    def login(user)
+   def sign_in(email, submitted_password)
+        repo = UserRepository.new
+        user = repo.find_by_email(email)
 
+        return nil if user.nil?
 
+        if BCrypt::Password.new(user["password"]) == submitted_password 
+            return user
+        else
+            return false
+        end
 
-  
+   end
 
+   
 
-
+   
 
 end

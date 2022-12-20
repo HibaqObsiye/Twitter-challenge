@@ -1,0 +1,18 @@
+<body>
+    
+<form action="/tweets" method="POST">
+<h2>Make a tweet</h2>
+    <div>
+        <label>message</label>
+        <input type= "text" name="message">
+    </div>
+   <input type="submit">
+</form>
+
+
+<% @tweets.each do |tweet| %>
+  <%= tweet.message %><br>
+<%= tweet.time_stamp%><br><br>
+<% end %>
+
+</body>
