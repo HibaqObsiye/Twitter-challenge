@@ -1,9 +1,9 @@
-require '../lib/tweet.rb' 
-require '../lib/tweet_repository.rb'
-require './spec_helper'
+require './lib/tweet' 
+require './lib/tweet_repository.rb'
+require 'spec_helper'
 
 def reset_tweets_table
-    seed_sql = File.read('../databases/tweets_seeds.sql')
+    seed_sql = File.read('./databases/tweets_seeds.sql')
     connection = PG.connect({ host: '127.0.0.1', dbname: 'twitter_test' })
     connection.exec(seed_sql)
 end
@@ -11,6 +11,7 @@ end
 describe TweetRepository do
     before(:each) do 
         reset_tweets_table
+        reset_users_table
     end
 
     context "given list of tweets" do
@@ -26,9 +27,9 @@ describe TweetRepository do
             all_tweets = tweets.all
             first_tweet = all_tweets.first
            
-            expect(first_tweet["message"]).to eq("hello world")
-            expect(first_tweet["time_stamp"]).to eq("2022-12-17 21:06:10")
-            expect(first_tweet["user_id"]).to eq("1")
+            expect(first_tweet.message).to eq("hello world")
+            expect(first_tweet.time_stamp).to eq("2022-12-17 21:06:10")
+            expect(first_tweet.user_id).to eq("1")
         end
 
     context "Given a list of tweets" do
@@ -70,7 +71,7 @@ describe TweetRepository do
 
             new_tweet = all_tweets[2]
            
-            expect(new_tweet["message"]).to eq("new message")
+            expect(new_tweet.message).to eq("new message")
         end
     end
 

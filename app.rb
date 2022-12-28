@@ -9,23 +9,24 @@ require 'time'
 
 DatabaseConnection.connect('twitter_test')
 class Application < Sinatra::Base
-  enable :sessions
   # This allows the app code to refresh
   # without having to restart the server.
   configure :development do
     register Sinatra::Reloader
     also_reload 'lib/tweet_repository'
   end
+  enable :sessions
 
   get '/' do
     return erb(:homepage)
   end
 
   get '/tweets' do
-    repo  = TweetRepository.new
-  
-    @tweets = repo.all
-    
+    tweets  = TweetRepository.new
+    users = UserRepository.new
+
+    @tweets = tweets.all
+    @users = users.all
     return erb(:tweets)
   end
 
@@ -33,7 +34,7 @@ class Application < Sinatra::Base
     tweet = Tweet.new
     tweet.message = params[:message]
     tweet.time_stamp = Time.new.strftime("%Y/%m/%d %k:%M:%S")
-    tweet.user_id = params[:user_id]
+    tweet.user_id = session[:user]["id"]
     repo  = TweetRepository.new
     repo.create(tweet)
 
@@ -54,7 +55,7 @@ class Application < Sinatra::Base
     user.email = params[:email]
     user.password = params[:password]
     repo.create(user)
-      p user
+    session[:user] = repo.sign_in(user.email, user.password)
     return erb(:successful_signup)
   end
 

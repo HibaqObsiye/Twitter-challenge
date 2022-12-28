@@ -1,16 +1,16 @@
-require '../../chitter-challenge/lib/user.rb' 
-require '../../chitter-challenge/lib/user_repository.rb'
-require '../spec/spec_helper.rb' 
+require './lib/user.rb' 
+require './lib/user_repository.rb'
+require './spec/spec_helper.rb' 
 # require '../lib/database_connection.rb'
 
 def reset_tweets_table
-    seed_sql = File.read('../databases/tweets_seeds.sql')
+    seed_sql = File.read('./databases/tweets_seeds.sql')
     connection = PG.connect({ host: '127.0.0.1', dbname: 'twitter_test' })
     connection.exec(seed_sql)
 end
 
 def reset_users_table
-    seed_sql = File.read('../databases/tweets_seeds.sql')
+    seed_sql = File.read('./databases/tweets_seeds.sql')
     connection = PG.connect({ host: '127.0.0.1', dbname: 'twitter_test' })
     connection.exec(seed_sql)
 end
@@ -58,6 +58,7 @@ describe UserRepository do
             repo = UserRepository.new
             user = User.new
             
+            user.id = "4"
             user.name = "hibaq"
             user.username = "hibaq123"
             user.email = "hibaq@email.com"
@@ -72,6 +73,7 @@ describe UserRepository do
             repo = UserRepository.new
             user = User.new
             
+            user.id = "4"
             user.name = "hibaq"
             user.username = "hibaq123"
             user.email = "hibaq@email.com"
