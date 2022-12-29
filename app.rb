@@ -2,7 +2,7 @@ require 'sinatra/base'
 require 'sinatra/reloader'
 require'./lib/database_connection.rb'  
 require './lib/tweet_repository'
- require './lib/user_repository.rb'
+require './lib/user_repository.rb'
 require './lib/user.rb'
 require './lib/tweet.rb'  
 require 'time'
@@ -79,11 +79,6 @@ class Application < Sinatra::Base
     @user = user.find_by_email(email)
     return "successful login"
    end
-   
   end
-
-
-
-
 end
 
