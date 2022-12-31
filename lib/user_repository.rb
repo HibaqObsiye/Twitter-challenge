@@ -61,11 +61,5 @@ class UserRepository
         else
             return false
         end
-
    end
-
-   
-
-   
-
 end

@@ -1,10 +1,11 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
 require'./lib/database_connection.rb'  
-require './lib/tweet_repository'
+require './lib/tweet_repository.rb'
 require './lib/user_repository.rb'
 require './lib/user.rb'
 require './lib/tweet.rb'  
+require './lib/user_params.rb'
 require 'time'
 
 DatabaseConnection.connect('twitter_test')
@@ -26,6 +27,7 @@ class Application < Sinatra::Base
     users = UserRepository.new
 
     @tweets = tweets.all
+   
     @users = users.all
     return erb(:tweets)
   end
@@ -46,17 +48,17 @@ class Application < Sinatra::Base
   end
 
   post '/signup' do
-    repo = UserRepository.new
-    user = User.new
-
-    user.id = (repo.all.length + 1)
-    user.name = params[:name]
-    user.username = params[:username]
-    user.email = params[:email]
-    user.password = params[:password]
-    repo.create(user)
-    session[:user] = repo.sign_in(user.email, user.password)
-    return erb(:successful_signup)
+    checking_params = UserParams.new(params[:new_name], params[:new_username], params[:new_email], params[:new_password])
+  
+    if empty_user_params?
+      erb(:empty_user_params)
+    elsif checking_params.invalid_params? 
+      erb(:invalid_email_params)
+    else
+      @new_user = create_user
+      
+      return erb(:successful_signup)
+    end
   end
 
   get '/login' do
@@ -80,5 +82,28 @@ class Application < Sinatra::Base
     return "successful login"
    end
   end
+
+  private
+
+  def create_user
+    repo = UserRepository.new
+    @new_user = User.new
+
+    @new_user.id = (repo.all.length + 1)
+    @new_user.name = params[:new_name]
+    @new_user.username = params[:new_username]
+    @new_user.email = params[:new_email]
+    @new_user.password = params[:new_password]
+    repo.create(@new_user)
+     session[:user] = repo.sign_in(@new_user.email, @new_user.password)
+  end
+
+  def empty_user_params?
+    params[:new_name] == "" || params[:new_username] == "" || params[:new_username] == "" || params[:new_email] == "" || params[:new_password] == "" || params[:new_password] == "" 
+  end
+
+
+
+
 end
 
